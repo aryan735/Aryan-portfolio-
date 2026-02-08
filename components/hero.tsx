@@ -2,7 +2,7 @@
 
 import { motion } from 'framer-motion'
 import { useEffect, useState } from 'react'
-import { Hyperspeed } from './ui/hyperspeed'
+import { Plasma } from './ui/plasma'
 
 export function Hero() {
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 })
@@ -147,8 +147,8 @@ export function Hero() {
         </motion.div>
       </motion.div>
 
-      {/* Hyperspeed background */}
-      <Hyperspeed speed={0.02} direction="forward" />
+      {/* Plasma background */}
+      <Plasma />
     </section>
   )
 }

@@ -4,7 +4,6 @@ import { Space_Grotesk } from 'next/font/google'
 
 import './globals.css'
 import { AnimatedBackground } from '@/components/animated-background'
-import { DotGrid } from '@/components/ui/dot-grid'
 
 const spaceGrotesk = Space_Grotesk({ subsets: ['latin'], weight: ['400', '500', '600', '700'] })
 
@@ -36,7 +35,6 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={`${spaceGrotesk.className} antialiased overflow-x-hidden bg-background`}>
-        <DotGrid dotSize={2} gap={30} color="#22d3ee" opacity={0.15} />
         <AnimatedBackground />
         {children}
       </body>
