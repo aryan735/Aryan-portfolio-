@@ -74,8 +74,7 @@ export function About() {
             variants={itemVariants}
             className="text-lg text-gray-400 max-w-3xl font-light leading-relaxed"
           >
-            I'm a backend engineer passionate about designing and building scalable microservices, event-driven architectures, and robust distributed systems. With expertise in Java, Spring Boot, Kafka, and cloud technologies, I focus on creating production-grade solutions that handle complex business logic with precision. My work emphasizes secure authentication systems, efficient caching strategies, and clean architecture patterns that stand the test of time.
-          </motion.p>
+           Backend Engineer working at an Agentic AI platform startup, contributing to backend systems that support LLM-powered agents and multi-step execution workflows. Involved in building and maintaining backend services and orchestration components that enable reliable agent execution while keeping core logic modular and production-safe. Works closely with system reliability concerns such as request tracing, execution visibility, and structured backend design. Experienced in developing clean, maintainable backend architectures and database-backed systems, with a strong interest in scalable and performance-oriented platform development.          </motion.p>
         </motion.div>
 
         {/* Stats Grid */}
