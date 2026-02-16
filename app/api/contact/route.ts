@@ -1,4 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { Resend } from 'resend'
+
+const resend = new Resend(process.env.RESEND_API_KEY)
 
 // Rate limiting map (simple in-memory solution)
 const rateLimitMap = new Map<string, number[]>()
@@ -60,33 +63,32 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ message: 'Message must be between 10 and 5000 characters' }, { status: 400 })
     }
 
-    // Simulate email sending (in production, integrate with Resend or similar)
-    // For now, we'll just return success
-    // To integrate with Resend, uncomment the code below and add your API key to environment variables
+    // Send email via Resend
+    const { data, error } = await resend.emails.send({
+      from: 'Portfolio Contact <onboarding@resend.dev>',
+      to: 'aryanraj.dev.net@gmail.com',
+      replyTo: email,
+      subject: `New contact form submission from ${name}`,
+      html: `
+        <div style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; max-width: 600px; margin: 0 auto; background: #0f172a; color: #e2e8f0; padding: 32px; border-radius: 12px;">
+          <h2 style="color: #22d3ee; margin-bottom: 24px; border-bottom: 1px solid #1e293b; padding-bottom: 16px;">📬 New Contact Form Submission</h2>
+          <p style="margin: 8px 0;"><strong style="color: #94a3b8;">Name:</strong> ${escapeHtml(name)}</p>
+          <p style="margin: 8px 0;"><strong style="color: #94a3b8;">Email:</strong> <a href="mailto:${escapeHtml(email)}" style="color: #22d3ee;">${escapeHtml(email)}</a></p>
+          <div style="margin-top: 24px; padding: 20px; background: #1e293b; border-radius: 8px; border-left: 4px solid #22d3ee;">
+            <p style="margin: 0 0 8px 0;"><strong style="color: #94a3b8;">Message:</strong></p>
+            <p style="margin: 0; line-height: 1.6;">${escapeHtml(message).replace(/\n/g, '<br>')}</p>
+          </div>
+          <p style="margin-top: 24px; font-size: 12px; color: #64748b;">This email was sent from your portfolio contact form.</p>
+        </div>
+      `,
+    })
 
-    // const { Resend } = await import('resend')
-    // const resend = new Resend(process.env.RESEND_API_KEY)
-    //
-    // const emailResult = await resend.emails.send({
-    //   from: 'contact@yourdomain.com',
-    //   to: 'your-email@example.com',
-    //   replyTo: email,
-    //   subject: `New contact form submission from ${name}`,
-    //   html: `
-    //     <h2>New Contact Form Submission</h2>
-    //     <p><strong>Name:</strong> ${escapeHtml(name)}</p>
-    //     <p><strong>Email:</strong> ${escapeHtml(email)}</p>
-    //     <p><strong>Message:</strong></p>
-    //     <p>${escapeHtml(message).replace(/\n/g, '<br>')}</p>
-    //   `,
-    // })
-    //
-    // if (emailResult.error) {
-    //   return NextResponse.json({ message: 'Failed to send email' }, { status: 500 })
-    // }
+    if (error) {
+      console.error('[Contact Form] Resend error:', error)
+      return NextResponse.json({ message: 'Failed to send email. Please try again.' }, { status: 500 })
+    }
 
-    // For demo purposes, we'll just log and return success
-    console.log(`[Contact Form] Received message from ${name} (${email}): ${message.substring(0, 50)}...`)
+    console.log(`[Contact Form] Email sent successfully. ID: ${data?.id}`)
 
     return NextResponse.json(
       { message: 'Message sent successfully! I will get back to you soon.' },
